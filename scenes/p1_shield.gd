@@ -1,0 +1,30 @@
+extends Area2D
+
+var velocity = Vector2()
+var SPEED = 500
+var movementPosition = 400
+
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+
+
+# Called every frame. 'delta' is the elapsed time sincethe previous frame.
+func _physics_process(delta):
+	
+	if(global_position.x < get_parent().get_node("Player1/Marker2D").global_position.x + movementPosition):
+		velocity.x = SPEED
+		translate(velocity * delta)
+	
+		
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	queue_free()
+
+func destroy():
+	queue_free()
+
+
+func _on_timer_timeout():
+	queue_free()
