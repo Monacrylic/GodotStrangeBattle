@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://fbhbvbp6ntx3"]
+[gd_scene load_steps=10 format=3 uid="uid://fbhbvbp6ntx3"]
 
 [ext_resource type="Texture2D" uid="uid://cmpp1mkgumwbo" path="res://Resources/darkWinter.jpg" id="1_qcgtg"]
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_ufljp"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cy6jtk5pymfg0" path="res://scenes/wizardOne.tscn" id="3_pnrn0"]
 [ext_resource type="PackedScene" uid="uid://v8p6pf25ejf" path="res://scenes/wizardTwo.tscn" id="4_vygwn"]
 [ext_resource type="Script" path="res://addons/mqtt/mqtt.gd" id="6_m2dae"]
+[ext_resource type="PackedScene" uid="uid://dbfnlilptldm0" path="res://scenes/ui_elements.tscn" id="7_6alhk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_atcbe"]
 texture = ExtResource("2_yl6ap")
@@ -807,10 +808,10 @@ texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1251.0
-offset_top = -764.0
-offset_right = 994.0
-offset_bottom = 548.0
+offset_left = -1225.0
+offset_top = -756.0
+offset_right = 1020.0
+offset_bottom = 556.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_qcgtg")
@@ -831,6 +832,8 @@ position = Vector2(758, 310)
 
 [node name="MQTT" type="Node" parent="."]
 script = ExtResource("6_m2dae")
+
+[node name="UI_elements" parent="." instance=ExtResource("7_6alhk")]
 
 [connection signal="broker_connected" from="MQTT" to="." method="_on_mqtt_broker_connected"]
 [connection signal="received_message" from="MQTT" to="." method="_on_mqtt_received_message"]

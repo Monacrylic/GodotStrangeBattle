@@ -25,6 +25,8 @@ func _on_mqtt_broker_connected():
 	$MQTT.subscribe("IDD/player2/shield/start", qos)
 	$MQTT.subscribe("IDD/player1/shield/end", qos)
 	$MQTT.subscribe("IDD/player2/shield/end", qos)
+	$MQTT.subscribe("IDD/player1/hit", qos)
+	$MQTT.subscribe("IDD/player2/hit", qos)
 	
 	receivedmessagecount = 0
 
@@ -51,11 +53,29 @@ func _on_mqtt_received_message(topic, message):
 			$Player2.player2_defend(true)
 		"IDD/player2/shield/end":
 			$Player2.player2_defend(false)
+		"IDD/player1/hit":
+			setHealthBar(1, int(message))
+		"IDD/player2/hit":
+			setHealthBar(2, int(message))
+			
+			
 		
 func mqtt_injurePlayer(playerID, playerDamage):
 	$MQTT.publish("IDD/player" + str(playerID) + "/damage", str(playerDamage), false)
 	
 func mqtt_successfulDefend(playerID):
 	$MQTT.publish("IDD/player" + str(playerID) + "/successfulDefend", str(0), false)
-	
+
+# Stuff here should actually be in the UI script but, its okay for now.
+func setHealthBar(playerID, value):
+	match playerID:
+		1:
+			get_node("UI_elements/Player1/HealthBar").value = int(value)
+			if(value==0):
+				$Player1.die()
+		2:
+			get_node("UI_elements/Player2/HealthBar").value = int(value)
+			if(value==0):
+				$Player2.die()
+			
 	

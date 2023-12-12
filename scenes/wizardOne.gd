@@ -15,6 +15,9 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 # Shield Status
 var p1_shield_status = false
 
+#animation
+var animationOverride = false
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -47,30 +50,44 @@ func _physics_process(delta):
 		player1_attack()
 		
 	# Continue playing sprite Idle animation
-	if (sprite2D.is_playing() == false):
-		sprite2D.animation="default"
-		sprite2D.play("default")
+
+	
+	check_and_return_to_idle_animation(animationOverride)
 
 func player1_attack():
 	sprite2D.animation = "attackSpell"
 	var fireball = FIREBALL.instantiate()
 	get_parent().add_child(fireball)
 	fireball.position = $Marker2D.global_position
+	
+
 
 func player1_defend(new_shield_state):
-	#if(new_shield_state == true and p1_shield_status == false):
-	$Sprite2D.play("deployShield")
-	var p1_shield = P1_SHIELD.instantiate()
-	get_parent().add_child(p1_shield)
-	p1_shield.position = $Marker2D.global_position
-	p1_shield_status = true
-	#elif(new_shield_state == false):
-		##Destroy the p1_shield child that was made above
-		#if $P1_SHIELD != null:  # Check if the p1_shield exists
-			#$P1_SHIELD.destroy()  # Destroy the p1_shield node
-			#p1_shield_status = false
+	if(new_shield_state == true and p1_shield_status == false):
+		sprite2D.play("deployShield")
+		var p1_shield = P1_SHIELD.instantiate()
+		get_parent().add_child(p1_shield)
+		p1_shield.position = $Marker2D.global_position
+		p1_shield_status = true
+	elif(new_shield_state == false):
+		#Destroy the p1_shield child that was made above
+		print("reached here")
+		var shieldNode = get_parent().get_node_or_null("p1_shield")
+		if shieldNode != null:  # Check if the p1_shield exists
+			print("hello")
+			shieldNode.destroy()  # Destroy the p1_shield node
+			p1_shield_status = false
 
-func injury():
-	$Sprite2D.play("hurt")
-	get_tree().get_root().get_node("Node").mqtt_injurePlayer(1, 5)
-	
+func injury(damage):
+	sprite2D.play("hurt")
+	get_tree().get_root().get_node("Node").mqtt_injurePlayer(1, damage)
+
+func check_and_return_to_idle_animation(override):
+	if (sprite2D.is_playing() == false and override == false):
+		sprite2D.animation="default"
+		sprite2D.play("default")
+
+func die():
+	sprite2D.animation="dead"
+	sprite2D.play("dead")
+	animationOverride = true

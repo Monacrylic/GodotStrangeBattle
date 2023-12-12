@@ -23,13 +23,12 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 func _on_body_entered(body):
 	print(body.name)
 	if(body.name == "Player2"):
-		body.injury()
+		body.injury(5)
 	queue_free()
 
 
 func _on_area_entered(area):
 	if(area.name == "p2_shield"):
 		get_tree().get_root().get_node("Node").mqtt_successfulDefend(2)
-		area.destroy()
 		queue_free()
 	

@@ -1,8 +1,8 @@
 extends Area2D
 
 var velocity = Vector2()
-var SPEED = -500
-var movementPosition = 400
+var SPEED = -1000
+var movementPosition = 100
 
 
 
@@ -24,6 +24,3 @@ func destroy():
 	queue_free()
 
 
-func _on_timer_timeout():
-	queue_free()
-	#pass
