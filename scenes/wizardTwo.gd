@@ -9,10 +9,15 @@ var p2_shield_status = false
 
 # Lightball stuff
 const LIGHTBALL = preload("res://scenes/lighball.tscn")
+const YELLOWBEAM = preload("res://scenes/p2_beam.tscn")
+
 
 # animation Override
 @onready var sprite2D = $Sprite2D
 var animationOverride = false
+
+# Beam status
+var beamStatus= false
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -45,7 +50,14 @@ func _physics_process(delta):
 	if(Input.is_action_just_pressed("p2_attack")):
 		player2_attack()
 		
+	if(Input.is_action_just_pressed("p2_beam")):
+		player2_beam(true)
+		
+	
 	check_and_return_to_idle_animation(animationOverride)
+	
+	if(beamStatus):
+		sendBeams()
 		
 func injury(damage):
 	sprite2D.play("hurt")
@@ -56,6 +68,20 @@ func player2_attack():
 	var lightball = LIGHTBALL.instantiate()
 	get_parent().add_child(lightball)
 	lightball.position = $Marker2D.global_position
+
+func player2_beam(newBeamState):
+	if(newBeamState):
+		sprite2D.animation = "beamAttack"
+		animationOverride = true
+		beamStatus= true
+	else:
+		beamStatus = false
+		animationOverride = false
+
+func sendBeams():
+	var yellowBeam = YELLOWBEAM.instantiate()
+	get_parent().add_child(yellowBeam)
+	yellowBeam.position = $Marker2D.global_position
 	
 func player2_defend(new_shield_state):
 	if(new_shield_state == true and p2_shield_status == false):
@@ -67,10 +93,9 @@ func player2_defend(new_shield_state):
 		p2_shield_status = true
 	elif(new_shield_state == false):
 		#Destroy the p1_shield child that was made above
-		print("reached here")
 		var shieldNode = get_parent().get_node_or_null("p2_shield")
 		if shieldNode != null:  # Check if the p1_shield exists
-			print("hello")
+			
 			shieldNode.destroy()  # Destroy the p1_shield node
 			p2_shield_status = false
 			animationOverride = false

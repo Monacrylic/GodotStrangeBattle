@@ -1,51 +1,37 @@
-[gd_scene load_steps=7 format=3 uid="uid://546okasnc8r6"]
+[gd_scene load_steps=6 format=3 uid="uid://546okasnc8r6"]
 
-[ext_resource type="Texture2D" uid="uid://dixrqbxv7idas" path="res://Resources/beam_red.png" id="1_fmiq5"]
+[ext_resource type="Script" path="res://scenes/p1_beam.gd" id="1_68mnh"]
+[ext_resource type="Texture2D" uid="uid://doygnonvakna7" path="res://Resources/beam_smaller.png" id="2_ngycs"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sqe3s"]
-atlas = ExtResource("1_fmiq5")
-region = Rect2(0, 688, 1741, 43)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jtnau"]
+size = Vector2(49, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_74rum"]
-atlas = ExtResource("1_fmiq5")
-region = Rect2(36, 348, 1705, 192)
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdny6"]
+atlas = ExtResource("2_ngycs")
+region = Rect2(26, 0, 79, 197)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2s0rm"]
-atlas = ExtResource("1_fmiq5")
-region = Rect2(0, 0, 1741, 183)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_8o45a"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_bdmia"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_sqe3s")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_74rum")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2s0rm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_74rum")
+"texture": SubResource("AtlasTexture_vdny6")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jtnau"]
-size = Vector2(1721, 36)
-
 [node name="p1_beam" type="Area2D"]
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(1, 2)
-rotation = -6.28319
-sprite_frames = SubResource("SpriteFrames_8o45a")
-autoplay = "default"
-frame_progress = 0.381676
+script = ExtResource("1_68mnh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(2.5, 8)
+position = Vector2(28.5, 20)
 shape = SubResource("RectangleShape2D_jtnau")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(28.375, 19.7263)
+scale = Vector2(0.648734, 0.205825)
+sprite_frames = SubResource("SpriteFrames_bdmia")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -19,12 +19,16 @@ func _on_mqtt_broker_connected():
 	print("Connected")
 	var qos = 0
 	
-	$MQTT.subscribe("IDD/player1/pulse/start", qos)
-	$MQTT.subscribe("IDD/player2/pulse/start", qos)
+	$MQTT.subscribe("IDD/player1/godot/pulse/start", qos)
+	$MQTT.subscribe("IDD/player2/godot/pulse/start", qos)
 	$MQTT.subscribe("IDD/player1/shield/start", qos)
 	$MQTT.subscribe("IDD/player2/shield/start", qos)
 	$MQTT.subscribe("IDD/player1/shield/end", qos)
 	$MQTT.subscribe("IDD/player2/shield/end", qos)
+	$MQTT.subscribe("IDD/player2/godot/beam/start", qos)
+	$MQTT.subscribe("IDD/player2/godot/beam/end", qos)
+	$MQTT.subscribe("IDD/player1/godot/beam/start", qos)
+	$MQTT.subscribe("IDD/player1/godot/beam/end", qos)
 	$MQTT.subscribe("IDD/player1/hit", qos)
 	$MQTT.subscribe("IDD/player2/hit", qos)
 	
@@ -41,9 +45,9 @@ func _on_mqtt_received_message(topic, message):
 	print(topic)
 	print(message)
 	match topic:
-		"IDD/player1/pulse/start":
+		"IDD/player1/godot/pulse/start":
 			$Player1.player1_attack()
-		"IDD/player2/pulse/start":
+		"IDD/player2/godot/pulse/start":
 			$Player2.player2_attack()
 		"IDD/player1/shield/start":
 			$Player1.player1_defend(true)
@@ -53,6 +57,15 @@ func _on_mqtt_received_message(topic, message):
 			$Player2.player2_defend(true)
 		"IDD/player2/shield/end":
 			$Player2.player2_defend(false)
+		"IDD/player1/godot/beam/end":
+			$Player1.player1_beam(false)
+		"IDD/player1/godot/beam/start":
+			$Player1.player1_beam(true)
+		"IDD/player2/godot/beam/start":
+			$Player2.player2_beam(true)
+		"IDD/player2/godot/beam/end":
+			$Player2.player2_beam(false)
+		
 		"IDD/player1/hit":
 			setHealthBar(1, int(message))
 		"IDD/player2/hit":
